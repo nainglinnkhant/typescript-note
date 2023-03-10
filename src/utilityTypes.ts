@@ -15,6 +15,6 @@ const getPosts = async () => {
 
 // We can extract one specific type of a union type using this syntax
 type Color = Extract<
-  { type: 'rgb', value: string } | { type: 'hsl', value: string },
+  { type: 'rgb'; value: string } | { type: 'hsl'; value: string },
   { type: 'rgb' }
 >
