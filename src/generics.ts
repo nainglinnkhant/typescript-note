@@ -58,6 +58,31 @@ const getKeyWithHighestValue = <TObj extends Record<string, number>>(
 }
 const highestKey = getKeyWithHighestValue({ a: 1, b: 2, c: 3 })
 
+// Another use of generic constraint
+const getDeepValue = <
+  TObj,
+  TFirstKey extends keyof TObj,
+  TSecondKey extends keyof TObj[TFirstKey]
+>(
+  obj: TObj,
+  firstKey: TFirstKey,
+  secondKey: TSecondKey
+) => {
+  return {} as TObj[TFirstKey][TSecondKey]
+}
+
+const deepObject = {
+  foo: {
+    a: true,
+    b: 1,
+  },
+  bar: {
+    c: 'cool',
+    d: 2,
+  },
+}
+const deepValue = getDeepValue(deepObject, 'foo', 'a')
+
 // It is fine to use type casting in the return value of a function
 const getObjectKeys = <TObj extends {}>(obj: TObj) => {
   return Object.keys(obj) as (keyof TObj)[]
@@ -100,3 +125,63 @@ const users = [
   { name: 'Dave', age: 30 },
 ]
 console.log(groupBy(users, 'age'))
+
+// In this case below, generic is inferred from the argument and conditional type is used for the return value
+interface Human {
+  firstname: string
+  lastname: string
+}
+interface Animal {
+  name: string
+}
+type HumanOrAnimal<T extends Human | Animal> = T extends Human
+  ? { humanName: string }
+  : { animalName: string }
+
+const getDisplayName = <T extends Human | Animal>(item: T): HumanOrAnimal<T> => {
+  if ('name' in item) {
+    return { animalName: item.name } as HumanOrAnimal<T>
+  } else {
+    return { humanName: `${item.firstname} ${item.lastname}` } as HumanOrAnimal<T>
+  }
+}
+
+const human = getDisplayName({ firstname: 'John', lastname: 'Doe' })
+const dog = getDisplayName({ name: 'Brownie' })
+
+// Generics in a function are passed to another functions that were returned from that function
+const makeKeyRemover =
+  <TKey extends string>(arr: TKey[]) =>
+  <TObj>(obj: TObj): Omit<TObj, TKey> => {
+    return {} as any
+  }
+const keyRemover = makeKeyRemover(['a', 'b'])
+const newObj = keyRemover({ a: 1, b: 2, c: 3 })
+
+// Keys will be a union type and it will include all keys of Obj
+type Obj = {
+  a: 'a'
+  a2: 'a2'
+  a3: 'a3'
+  b: 'b'
+  b1: 'b1'
+  b2: 'b2'
+}
+type Keys = keyof Obj
+
+// KeysStartingWithA will be a union type and it will include all keys of Obj starting with 'a'
+type KeysStartingWithA = Extract<Keys, `a${string}`>
+
+// The below syntax can be used to iterate through each member of a union type
+// In the case below, we gave the private generic _ExtractedKeys a default value to avoid DRY
+type ValuesOfKeysStartingWithA<
+  TObj,
+  _ExtractedKeys extends keyof TObj = Extract<keyof TObj, `a${string}`>
+> = {
+  [K in _ExtractedKeys]: TObj[K]
+}[_ExtractedKeys]
+
+type Values = ValuesOfKeysStartingWithA<Obj>
+
+// We can type cast an array or object as const to make the literal value is inferred and the value is immutable
+const contributors = ['Anderson', 'Lee', 'Mike'] as const
