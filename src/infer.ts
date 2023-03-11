@@ -47,3 +47,23 @@ type ObjectTypeTwo = GetFromDeepObject<{
 type ObjectTypeThree = GetFromDeepObject<{
   c: number
 }>
+
+// The approach to make an argument optional based on another argument that was passed in
+type AuthEvent =
+  | {
+      type: 'LOG_IN'
+      payload: {
+        userId: number
+      }
+    }
+  | {
+      type: 'SIGN_OUT'
+    }
+
+const sendEvent = <Type extends AuthEvent['type']>(
+  ...args: Extract<AuthEvent, { type: Type }> extends { payload: infer TPayload }
+    ? [type: Type, payload: TPayload]
+    : [type: Type]
+) => {}
+sendEvent('LOG_IN', { userId: 1 })
+sendEvent('SIGN_OUT')
