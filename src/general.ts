@@ -48,3 +48,28 @@ const addOne = (a: number) => a + 1
 const numToString = (a: number) => a.toString()
 const stringToNum = (a: string) => parseInt(a)
 const composedFunc = compose(addOne, numToString, stringToNum)
+
+// How to get a union type which includes the values of an object or array type
+interface ColorVariants {
+  primary: 'blue'
+  secondary: 'red'
+  tertiary: 'green'
+}
+type PrimaryColor = ColorVariants['primary']
+type NonPrimaryColor = ColorVariants['secondary' | 'tertiary']
+type EveryColor = ColorVariants[keyof ColorVariants]
+
+type LettersArray = ['a', 'b', 'c']
+type AOrB = LettersArray[0 | 1]
+type Letter = LettersArray[number]
+
+interface UserRoleConfig {
+  user: ['view', 'create', 'update']
+  superAdmin: ['view', 'create', 'update', 'delete']
+}
+type Role = keyof UserRoleConfig
+type RoleActions = UserRoleConfig[keyof UserRoleConfig][number]
+
+// The type of import can be taken as follow
+type ActionModule = typeof import('./actions')
+type Actions = ActionModule[keyof ActionModule]
