@@ -58,7 +58,7 @@ const getKeyWithHighestValue = <TObj extends Record<string, number>>(
 }
 const highestKey = getKeyWithHighestValue({ a: 1, b: 2, c: 3 })
 
-// Another use of generic constraint
+// Another usage of generic constraint
 const getDeepValue = <
   TObj,
   TFirstKey extends keyof TObj,

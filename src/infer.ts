@@ -67,3 +67,15 @@ const sendEvent = <Type extends AuthEvent['type']>(
 ) => {}
 sendEvent('LOG_IN', { userId: 1 })
 sendEvent('SIGN_OUT')
+
+// Another usage of infer combining with template literal
+interface ApiData {
+  'maps:longitude': string
+  'maps:latitude': string
+  coords: number[]
+}
+type RemoveMapsFromObj<TObj> = {
+  [TKey in keyof TObj as RemoveMaps<TKey>]: TObj[TKey]
+}
+type RemoveMaps<T> = T extends `maps:${infer WithoutMaps}` ? WithoutMaps : T
+type DesiredShape = RemoveMapsFromObj<ApiData>

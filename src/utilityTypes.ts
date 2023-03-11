@@ -18,3 +18,34 @@ type Color = Extract<
   { type: 'rgb'; value: string } | { type: 'hsl'; value: string },
   { type: 'rgb' }
 >
+
+// Deep Partial
+type DeepPartial<Thing> = Thing extends Function
+  ? Thing
+  : Thing extends Array<infer InferredArrayMember>
+  ? DeepPartialArray<InferredArrayMember>
+  : Thing extends object
+  ? DeepPartialObject<Thing>
+  : Thing | undefined
+
+interface DeepPartialArray<Thing> extends Array<DeepPartial<Thing>> {}
+
+type DeepPartialObject<Thing> = {
+  [Key in keyof Thing]?: DeepPartial<Thing[Key]>
+}
+
+interface SocialPost {
+  id: string
+  comments: { value: string }[]
+  meta: {
+    name: string
+    description: string
+  }
+}
+// In the case below, we don't need to specify the 'description' prop anymore whereas we have to if we used the original Partial
+const socialPost: DeepPartial<SocialPost> = {
+  id: '12',
+  meta: {
+    name: 'Foo',
+  },
+}
