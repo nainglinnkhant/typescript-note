@@ -73,3 +73,8 @@ type RoleActions = UserRoleConfig[keyof UserRoleConfig][number]
 // The type of import can be taken as follow
 type ActionModule = typeof import('./actions')
 type Actions = ActionModule[keyof ActionModule]
+
+// How to exclude a certain type from an array
+type ExcludeTypeArr<TArr extends any[], TExclude> = Exclude<TArr[number], TExclude>[]
+const arr = [1, 2, 3, 'string', true]
+type ExcludedArr = ExcludeTypeArr<typeof arr, string>
