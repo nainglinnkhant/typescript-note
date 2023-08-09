@@ -78,3 +78,11 @@ type Actions = ActionModule[keyof ActionModule]
 type ExcludeTypeArr<TArr extends any[], TExclude> = Exclude<TArr[number], TExclude>[]
 const arr = [1, 2, 3, 'string', true]
 type ExcludedArr = ExcludeTypeArr<typeof arr, string>
+
+// How to derive value types from as const
+const routes = {
+  home: '/',
+  admin: '/admin',
+  users: '/users',
+} as const
+type Route = (typeof routes)[keyof typeof routes]
