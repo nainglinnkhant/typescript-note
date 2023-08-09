@@ -49,3 +49,8 @@ const socialPost: DeepPartial<SocialPost> = {
     name: 'Foo',
   },
 }
+
+// Development helper type that lets you see properties of a type
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
