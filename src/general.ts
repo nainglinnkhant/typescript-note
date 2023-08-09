@@ -86,3 +86,10 @@ const routes = {
   users: '/users',
 } as const
 type Route = (typeof routes)[keyof typeof routes]
+
+// Type of an empty object
+type EmptyObj = Record<PropertyKey, never>
+const obj1: EmptyObj = {}
+const obj2: EmptyObj = 'John'
+const obj3: EmptyObj = { name: 'John' }
+const obj4: EmptyObj = undefined
