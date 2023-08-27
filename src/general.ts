@@ -10,10 +10,14 @@ type A = 'a' | 'b' | 'c' extends 'a' ? 'a' : never
 // TypeScript merges the members of union types and in the case below, other string type members will be overriden by the 'string' type
 // To prevent it, we can use the following approach
 type LooseAutocomplete<T extends string> = T | Omit<string, T>
-type Sizes = 'sm' | 'xs'
-type SizeAutocomplete = LooseAutocomplete<Sizes>
+type Size = 'sm' | 'xs'
+type SizeAutocomplete = LooseAutocomplete<Size>
 // Now we can use other strings that were not included in the union type while we still get the autocomplete
 const size: SizeAutocomplete = 'md'
+
+// Another way of typing loose union types
+type LooseSize = 'sm' | 'xs' | (string & {})
+const looseSize: LooseSize = 'md'
 
 // Function overloads define the possible patterns of a function
 // Function overloads
