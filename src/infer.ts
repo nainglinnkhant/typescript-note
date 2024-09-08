@@ -8,7 +8,7 @@ type StrictReturnType<T extends (...args: any) => any> = T extends (
   : never
 
 const func = () => true
-const foo = 'bar'
+const foo = "bar"
 
 // FuncResultOne can be passed in any type as the generic isn't constrained to a specific type
 type FuncResultOne = LooseReturnType<typeof foo>
@@ -51,27 +51,29 @@ type ObjectTypeThree = GetFromDeepObject<{
 // The approach to make an argument optional based on another argument that was passed in
 type AuthEvent =
   | {
-      type: 'LOG_IN'
+      type: "LOG_IN"
       payload: {
         userId: number
       }
     }
   | {
-      type: 'SIGN_OUT'
+      type: "SIGN_OUT"
     }
 
-const sendEvent = <Type extends AuthEvent['type']>(
-  ...args: Extract<AuthEvent, { type: Type }> extends { payload: infer TPayload }
+const sendEvent = <Type extends AuthEvent["type"]>(
+  ...args: Extract<AuthEvent, { type: Type }> extends {
+    payload: infer TPayload
+  }
     ? [type: Type, payload: TPayload]
     : [type: Type]
 ) => {}
-sendEvent('LOG_IN', { userId: 1 })
-sendEvent('SIGN_OUT')
+sendEvent("LOG_IN", { userId: 1 })
+sendEvent("SIGN_OUT")
 
 // Another usage of infer combining with template literal
 interface ApiData {
-  'maps:longitude': string
-  'maps:latitude': string
+  "maps:longitude": string
+  "maps:latitude": string
   coords: number[]
 }
 type RemoveMapsFromObj<TObj> = {

@@ -12,5 +12,5 @@ const removeKeys = <TObj extends {}, TArr extends (keyof TObj)[]>(
   const filteredObjArrs = objEntries.filter(objEntry => !keys.includes(objEntry[0]))
   return Object.fromEntries(filteredObjArrs) as RemoveByKey<TObj, TArr>
 }
-const removedKeys = removeKeys({ a: 1, b: 2, c: 3 }, ['a', 'b'])
+const removedKeys = removeKeys({ a: 1, b: 2, c: 3 }, ["a", "b"])
 console.log(removedKeys.c)

@@ -1,4 +1,4 @@
-import { Post } from '../types'
+import { Post } from "./types"
 
 // Generic is a type argument
 // Generic Type
@@ -10,7 +10,7 @@ const example: Example = { data: 12 }
 
 // Generic Function
 const fetchRequest = async <T>(): Promise<T> => {
-  const res = await fetch('https://jsonplaceholder.typicode.com/posts')
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts")
   return res.json()
 }
 const callFetchRequest = async () => {
@@ -21,16 +21,16 @@ const callFetchRequest = async () => {
 // We don't need to know the type of object passed in to infer it to the result. Genric will do it for us.
 const addIdToObject = <T>(obj: T) => {
   return {
-    id: '12',
+    id: "12",
     ...obj,
   }
 }
-const object = addIdToObject({ firstName: 'John', lastName: 'Doe' })
+const object = addIdToObject({ firstName: "John", lastName: "Doe" })
 
 // <T extends specific type> syntax can be used to constrain T to that specific type
 type GetPromiseReturnType<T extends (...args: any) => any> = Awaited<ReturnType<T>>
 // The below type gets the resolved value of an async function
-type Result = GetPromiseReturnType<() => Promise<{ firstName: 'John'; lastName: 'Doe' }>>
+type Result = GetPromiseReturnType<() => Promise<{ firstName: "John"; lastName: "Doe" }>>
 
 // We should always constrain generic type with 'extends'
 const getKeyWithHighestValue = <TObj extends Record<string, number>>(
@@ -77,23 +77,23 @@ const deepObject = {
     b: 1,
   },
   bar: {
-    c: 'cool',
+    c: "cool",
     d: 2,
   },
 }
-const deepValue = getDeepValue(deepObject, 'foo', 'a')
+const deepValue = getDeepValue(deepObject, "foo", "a")
 
 // It is fine to use type casting in the return value of a function
 const getObjectKeys = <TObj extends {}>(obj: TObj) => {
   return Object.keys(obj) as (keyof TObj)[]
 }
-const keys = getObjectKeys({ name: 'John', age: 14 })
+const keys = getObjectKeys({ name: "John", age: 14 })
 
 // Another magic of generic constraints. 'value' knows the exact type 'getValue' function will return.
 const getValue = <TObj, TKey extends keyof TObj>(obj: TObj, key: TKey) => {
   return obj[key]
 }
-const value = getValue({ a: 1, b: 'string', c: true }, 'a')
+const value = getValue({ a: 1, b: "string", c: true }, "a")
 
 // Generics can be given default values like we give default values to the parameters of a function
 const createSet = <T = string>() => {
@@ -121,10 +121,10 @@ const groupBy = <TObj extends Record<string, unknown>, TKey extends keyof TObj>(
   return result
 }
 const users = [
-  { name: 'John', age: 20 },
-  { name: 'Dave', age: 30 },
+  { name: "John", age: 20 },
+  { name: "Dave", age: 30 },
 ]
-console.log(groupBy(users, 'age'))
+console.log(groupBy(users, "age"))
 
 // In this case below, generic is inferred from the argument and conditional type is used for the return value
 interface Human {
@@ -139,15 +139,17 @@ type HumanOrAnimal<T extends Human | Animal> = T extends Human
   : { animalName: string }
 
 const getDisplayName = <T extends Human | Animal>(item: T): HumanOrAnimal<T> => {
-  if ('name' in item) {
+  if ("name" in item) {
     return { animalName: item.name } as HumanOrAnimal<T>
   } else {
-    return { humanName: `${item.firstname} ${item.lastname}` } as HumanOrAnimal<T>
+    return {
+      humanName: `${item.firstname} ${item.lastname}`,
+    } as HumanOrAnimal<T>
   }
 }
 
-const human = getDisplayName({ firstname: 'John', lastname: 'Doe' })
-const dog = getDisplayName({ name: 'Brownie' })
+const human = getDisplayName({ firstname: "John", lastname: "Doe" })
+const dog = getDisplayName({ name: "Brownie" })
 
 // Generics in a function are passed to another functions that were returned from that function
 const makeKeyRemover =
@@ -155,17 +157,17 @@ const makeKeyRemover =
   <TObj>(obj: TObj): Omit<TObj, TKey> => {
     return {} as any
   }
-const keyRemover = makeKeyRemover(['a', 'b'])
+const keyRemover = makeKeyRemover(["a", "b"])
 const newObj = keyRemover({ a: 1, b: 2, c: 3 })
 
 // Keys will be a union type and it will include all keys of Obj
 type Obj = {
-  a: 'a'
-  a2: 'a2'
-  a3: 'a3'
-  b: 'b'
-  b1: 'b1'
-  b2: 'b2'
+  a: "a"
+  a2: "a2"
+  a3: "a3"
+  b: "b"
+  b1: "b1"
+  b2: "b2"
 }
 type Keys = keyof Obj
 
@@ -184,4 +186,4 @@ type ValuesOfKeysStartingWithA<
 type Values = ValuesOfKeysStartingWithA<Obj>
 
 // We can type cast an array or object as const to make the literal value is inferred and the value is immutable
-const contributors = ['Anderson', 'Lee', 'Mike'] as const
+const contributors = ["Anderson", "Lee", "Mike"] as const

@@ -1,23 +1,23 @@
 // TypeScript iterates through each member of a union type when it's doing a the conditional type checking and this is called distributivity
-type Letters = 'a' | 'b' | 'c'
-type RemoveC<T> = T extends 'c' ? never : T
+type Letters = "a" | "b" | "c"
+type RemoveC<T> = T extends "c" ? never : T
 type LettersWithoutC = RemoveC<Letters>
 
 // The below A type doesn't extract 'a' from the union type because we didn't use a type helper to make distributivity works
-type Union = 'a' | 'b' | 'c'
-type A = 'a' | 'b' | 'c' extends 'a' ? 'a' : never
+type Union = "a" | "b" | "c"
+type A = "a" | "b" | "c" extends "a" ? "a" : never
 
 // TypeScript merges the members of union types and in the case below, other string type members will be overriden by the 'string' type
 // To prevent it, we can use the following approach
 type LooseAutocomplete<T extends string> = T | Omit<string, T>
-type Size = 'sm' | 'xs'
+type Size = "sm" | "xs"
 type SizeAutocomplete = LooseAutocomplete<Size>
 // Now we can use other strings that were not included in the union type while we still get the autocomplete
-const size: SizeAutocomplete = 'md'
+const size: SizeAutocomplete = "md"
 
 // Another way of typing loose union types
-type LooseSize = 'sm' | 'xs' | (string & {})
-const looseSize: LooseSize = 'md'
+type LooseSize = "sm" | "xs" | (string & {})
+const looseSize: LooseSize = "md"
 
 // Function overloads define the possible patterns of a function
 // Function overloads
@@ -26,7 +26,7 @@ function fn(x: number): void
 function fn(x: any) {
   console.log(x)
 }
-fn('21')
+fn("21")
 fn(21)
 
 // Advanced function overloads
@@ -55,45 +55,45 @@ const composedFunc = compose(addOne, numToString, stringToNum)
 
 // How to get a union type which includes the values of an object or array type
 interface ColorVariants {
-  primary: 'blue'
-  secondary: 'red'
-  tertiary: 'green'
+  primary: "blue"
+  secondary: "red"
+  tertiary: "green"
 }
-type PrimaryColor = ColorVariants['primary']
-type NonPrimaryColor = ColorVariants['secondary' | 'tertiary']
+type PrimaryColor = ColorVariants["primary"]
+type NonPrimaryColor = ColorVariants["secondary" | "tertiary"]
 type EveryColor = ColorVariants[keyof ColorVariants]
 
-type LettersArray = ['a', 'b', 'c']
+type LettersArray = ["a", "b", "c"]
 type AOrB = LettersArray[0 | 1]
 type Letter = LettersArray[number]
 
 interface UserRoleConfig {
-  user: ['view', 'create', 'update']
-  superAdmin: ['view', 'create', 'update', 'delete']
+  user: ["view", "create", "update"]
+  superAdmin: ["view", "create", "update", "delete"]
 }
 type Role = keyof UserRoleConfig
 type RoleActions = UserRoleConfig[keyof UserRoleConfig][number]
 
 // The type of import can be taken as follow
-type ActionModule = typeof import('./actions')
+type ActionModule = typeof import("./actions")
 type Actions = ActionModule[keyof ActionModule]
 
 // How to exclude a certain type from an array
 type ExcludeTypeArr<TArr extends any[], TExclude> = Exclude<TArr[number], TExclude>[]
-const arr = [1, 2, 3, 'string', true]
+const arr = [1, 2, 3, "string", true]
 type ExcludedArr = ExcludeTypeArr<typeof arr, string>
 
 // How to derive value types from as const
 const routes = {
-  home: '/',
-  admin: '/admin',
-  users: '/users',
+  home: "/",
+  admin: "/admin",
+  users: "/users",
 } as const
 type Route = (typeof routes)[keyof typeof routes]
 
 // Type of an empty object
 type EmptyObj = Record<PropertyKey, never>
 const obj1: EmptyObj = {}
-const obj2: EmptyObj = 'John'
-const obj3: EmptyObj = { name: 'John' }
+const obj2: EmptyObj = "John"
+const obj3: EmptyObj = { name: "John" }
 const obj4: EmptyObj = undefined

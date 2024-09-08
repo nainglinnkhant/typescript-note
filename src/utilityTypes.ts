@@ -1,4 +1,4 @@
-import { Post } from "../types"
+import { Post } from "./types"
 
 // Parameters
 type FuncType = (name: string, age: number) => void
